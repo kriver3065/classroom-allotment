@@ -1,0 +1,227 @@
+.timetable-wrapper {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.timetable-scroll {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.timetable-table th,
+.timetable-table td {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+}
+
+.day-header {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  color: #4f46e5;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 100px;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.slot-header {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  color: #6366f1;
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  min-width: 110px;
+}
+
+.day-cell {
+  background: rgba(248, 250, 252, 0.95);
+  color: #4f46e5;
+  font-weight: 700;
+  font-size: 0.9rem;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.schedule-cell {
+  background: rgba(255, 255, 255, 0.5);
+  min-height: 60px;
+  vertical-align: top;
+  transition: all 0.2s ease;
+}
+
+.schedule-cell.editable {
+  cursor: pointer;
+}
+
+.schedule-cell.editable:hover {
+  background: rgba(139, 92, 246, 0.15);
+  box-shadow: inset 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+
+.schedule-cell.has-data {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.cell-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.25rem;
+}
+
+.cell-dept {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: inline-block;
+  margin: 0 auto;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cell-classroom {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.cell-subject {
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}
+
+.cell-faculty {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
+.cell-year {
+  color: #fbbf24;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: rgba(245, 158, 11, 0.12);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 0.1rem auto 0;
+}
+
+.cell-unassigned {
+  color: #64748b;
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
+.cell-empty {
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.cell-empty-clickable {
+  color: rgba(139, 92, 246, 0.4);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.edit-info {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.edit-badge {
+  background: rgba(139, 92, 246, 0.2);
+  color: #a5b4fc;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .timetable-table th,
+  .timetable-table td {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.75rem;
+  }
+  .slot-header {
+    min-width: 90px;
+  }
+}
+
+/* Print Mode for PDF Export */
+.timetable-scroll.print-mode {
+  background: #ffffff !important;
+  border: 1px solid #000000 !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+}
+
+.timetable-scroll.print-mode .timetable-table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+.timetable-scroll.print-mode th,
+.timetable-scroll.print-mode td {
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+  background: #ffffff !important;
+}
+
+.timetable-scroll.print-mode .day-header,
+.timetable-scroll.print-mode .slot-header,
+.timetable-scroll.print-mode .day-cell {
+  background: #e5e5e5 !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.timetable-scroll.print-mode .cell-dept,
+.timetable-scroll.print-mode .cell-classroom,
+.timetable-scroll.print-mode .cell-year {
+  background: transparent !important;
+  color: #000000 !important;
+  border: 1px solid #000000 !important;
+  padding: 2px 4px !important;
+  font-weight: bold !important;
+  box-shadow: none !important;
+}
+
+.timetable-scroll.print-mode .cell-subject,
+.timetable-scroll.print-mode .cell-faculty,
+.timetable-scroll.print-mode .cell-unassigned,
+.timetable-scroll.print-mode .cell-empty,
+.timetable-scroll.print-mode .cell-empty-clickable {
+  color: #000000 !important;
+}
+
+.timetable-scroll.print-mode .cell-empty-clickable {
+  color: transparent !important; /* Hide the plus sign in print */
+}
