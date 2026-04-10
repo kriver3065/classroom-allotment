@@ -38,4 +38,9 @@ const scheduleSchema = new mongoose.Schema({
 
 scheduleSchema.index({ classroom: 1, day: 1, timeSlot: 1 }, { unique: true });
 
+scheduleSchema.index(
+  { faculty: 1, day: 1, timeSlot: 1 },
+  { unique: true, sparse: true }
+);
+
 module.exports = mongoose.model('Schedule', scheduleSchema);

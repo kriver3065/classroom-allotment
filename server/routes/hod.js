@@ -2,6 +2,8 @@ const express = require('express');
 const { protect, authorize } = require('../middleware/auth');
 const Schedule = require('../models/Schedule');
 const User = require('../models/User');
+// ADDED: reusable faculty conflict checker
+const checkFacultyConflict = require('../middleware/checkFacultyConflict');
 
 const router = express.Router();
 
@@ -35,6 +37,20 @@ router.put('/update-slot/:id', async (req, res) => {
     }
 
     const { subject, faculty, year } = req.body;
+
+    // ADDED: faculty conflict check before updating
+    const conflict = await checkFacultyConflict({
+      faculty,
+      day: schedule.day,
+      timeSlot: schedule.timeSlot,
+      excludeId: schedule._id
+    });
+    if (conflict) {
+      return res.status(400).json({
+        message: 'This faculty is already assigned to another classroom at this time'
+      });
+    }
+
     schedule.subject = subject !== undefined ? subject : schedule.subject;
     schedule.faculty = faculty !== undefined ? faculty : schedule.faculty;
     schedule.year = year !== undefined ? year : schedule.year;

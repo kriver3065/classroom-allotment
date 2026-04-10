@@ -6,6 +6,8 @@ const Department = require('../models/Department');
 const Classroom = require('../models/Classroom');
 const TimeSlot = require('../models/TimeSlot');
 const Schedule = require('../models/Schedule');
+// ADDED: reusable faculty conflict checker
+const checkFacultyConflict = require('../middleware/checkFacultyConflict');
 
 const router = express.Router();
 
@@ -183,8 +185,21 @@ router.post('/assign-slot', async (req, res) => {
   try {
     const { classroom, day, timeSlot, department, subject, faculty, year } = req.body;
 
+    // ADDED: faculty conflict check (exclude current schedule if updating an existing slot)
+    const existing = await Schedule.findOne({ classroom, day, timeSlot });
+    const conflict = await checkFacultyConflict({
+      faculty, day, timeSlot,
+      excludeId: existing ? existing._id : undefined
+    });
+    if (conflict) {
+      return res.status(400).json({
+        message: 'This faculty is already assigned to another classroom at this time'
+      });
+    }
+
     // Upsert: create if not exists, otherwise update department assignment
-    let schedule = await Schedule.findOne({ classroom, day, timeSlot });
+    // (reuses `existing` from the conflict check above — no duplicate query)
+    let schedule = existing;
 
     if (schedule) {
       // Update existing slot
@@ -223,6 +238,26 @@ router.post('/assign-slot', async (req, res) => {
 // ─── Edit any schedule ───
 router.put('/schedules/:id', async (req, res) => {
   try {
+    // ADDED: faculty conflict check before updating
+    const { faculty, day, timeSlot } = req.body;
+    if (faculty) {
+      // Resolve day/timeSlot: use values from request body, fall back to existing record
+      const current = await Schedule.findById(req.params.id);
+      if (!current) return res.status(404).json({ message: 'Schedule not found' });
+
+      const conflict = await checkFacultyConflict({
+        faculty,
+        day: day || current.day,
+        timeSlot: timeSlot || current.timeSlot,
+        excludeId: current._id
+      });
+      if (conflict) {
+        return res.status(400).json({
+          message: 'This faculty is already assigned to another classroom at this time'
+        });
+      }
+    }
+
     const schedule = await Schedule.findByIdAndUpdate(
       req.params.id,
       req.body,
