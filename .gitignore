@@ -12,7 +12,9 @@ client/dist
 client/dist-ssr
 client/*.local
 
+client/.env
 server/.env
+
 server/node_modules
 server/package-lock.json
 client/package-lock.json
